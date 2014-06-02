@@ -1,0 +1,4 @@
+Requires the Zay-ES and JME libraries.
+ http://hub.jmonkeyengine.org/wiki/doku.php/jme3:contributions:entitysystem
+
+http://jmonkeyengine.org/
