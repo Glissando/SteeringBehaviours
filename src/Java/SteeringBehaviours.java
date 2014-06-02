@@ -9,7 +9,6 @@ import com.simsilica.es.EntityId;
 
 public class SteeringBehaviours implements EntityComponent{
     EntityId id;
-    SceneGraphVisitorAdapter queuery;
     
     public SteeringBehaviours(){
         
