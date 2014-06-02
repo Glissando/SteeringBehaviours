@@ -36,14 +36,6 @@ public class SteeringBehaviours : MonoBehaviour{
 		return (target-transform.position).normalized;
 	}
 
-	/*public Vector3 Follow(string tag, float maxDistance = 5.0f){
-		Vector3[] targets = GameObject.FindGameObjectsWithTag(tag)
-			.Select( go => go.transform.position)
-			.Where( v => Vector3.SqrMagnitude(transform.position-v));
-
-
-	}*/
-
 	public Vector3 Wander(){
 		return Seek(new Vector3(Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f)));
 	}
