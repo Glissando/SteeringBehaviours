@@ -5,7 +5,8 @@ using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class SteeringBehaviours : MonoBehaviour{
-	public Vector3 SeekAll(string tag, float maxDistance = 5.0f){
+
+	public Vector3 SeekAll(string tag, float maxDistance){
 		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
 		Transform target = gos.Select (go => go.transform)
 			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
@@ -16,7 +17,7 @@ public class SteeringBehaviours : MonoBehaviour{
 		return target ? (target.position-transform.position).normalized : Vector3.zero;
 	}
 	
-	public Vector3 Seek(string tag, float maxDistance = 5.0f){
+	public Vector3 Seek(string tag, float maxDistance){
 		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
 		Transform target = gos.Select (go => go.transform)
 		.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
@@ -34,7 +35,15 @@ public class SteeringBehaviours : MonoBehaviour{
 	public Vector3 Seek(Vector3 target){
 		return (target-transform.position).normalized;
 	}
-	
+
+	/*public Vector3 Follow(string tag, float maxDistance = 5.0f){
+		Vector3[] targets = GameObject.FindGameObjectsWithTag(tag)
+			.Select( go => go.transform.position)
+			.Where( v => Vector3.SqrMagnitude(transform.position-v));
+
+
+	}*/
+
 	public Vector3 Wander(){
 		return Seek(new Vector3(Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f)));
 	}
@@ -58,8 +67,8 @@ public class SteeringBehaviours : MonoBehaviour{
 		return (transform.position-target).normalized;
 	}
 
-	public Vector3 Avoid(){
-		Ray ray = new Ray(transform.position,transform.position+rigidbody.velocity);
+	public Vector3 Avoid(float maxDistance){
+		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit, maxDistance))
 			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
@@ -68,7 +77,7 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Avoid(int layerMask){
-		Ray ray = new Ray(transform.position,transform.position+rigidbody.velocity);
+		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity,1 << layerMask))
 			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
@@ -77,7 +86,7 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Avoid(int layerMask, float maxDistance){
-		Ray ray = new Ray(transform.position,transform.position+rigidbody.velocity);
+		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit, maxDistance,1 << layerMask))
 			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
