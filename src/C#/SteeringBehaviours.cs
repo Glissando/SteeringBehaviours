@@ -105,18 +105,6 @@ public class SteeringBehaviours : MonoBehaviour{
 		return (-rigidbody.velocity*(Vector3.Distance(transform.position,target)/maxDistance)).normalized;
 	}
 
-	public Vector3 Queue(Transform target, int layerMask){
-		return Vector3.zero;
-	}
-
-	public IEnumerator PathFollow(Vector3[] points, float minDistance){
-		foreach(Vector3 v in points)
-			while(Vector3.SqrMagnitude(transform.position-v) < minDistance * minDistance){
-				Seek(v);
-			}
-		yield return null;
-	}
-
 	public Vector3 Pursuit(Transform target){
 		float T = Vector3.Distance(transform.position,target.position)/target.rigidbody.velocity.magnitude;
 
