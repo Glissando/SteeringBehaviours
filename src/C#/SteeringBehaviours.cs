@@ -173,7 +173,6 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Flock(string tag, float maxDistance){
-		Vector3 v = Vector3.zero;
 		Vector3 a = Alignment(tag,maxDistance);
 		Vector3 c = Cohesion(tag,maxDistance);
 		Vector3 s = Seperation(tag,maxDistance);
@@ -182,7 +181,6 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Flock(string tag, float maxDistance, params float[] weights){
-		Vector3 v = Vector3.zero;
 		Vector3 a = Alignment(tag,maxDistance);
 		Vector3 c = Cohesion(tag,maxDistance);
 		Vector3 s = Seperation(tag,maxDistance);
