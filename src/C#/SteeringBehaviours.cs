@@ -37,7 +37,7 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Wander(){
-		return Seek(new Vector3(Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f),Random.Range (1.0f,5.0f)));
+		return Seek(new Vector3(Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f)));
 	}
 
 	public Vector3 Flee(string tag, float maxDistance = 5.0f){
