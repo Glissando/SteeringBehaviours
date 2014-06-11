@@ -7,21 +7,22 @@ using System.Linq;
 public class SteeringBehaviours : MonoBehaviour{
 
 	public Vector3 SeekAll(string tag, float maxDistance){
-		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
-		Transform target = gos.Select (go => go.transform)
+		Vector3 dir = Vector3.zero;
+		Transform[] targets = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
 			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
 			.OrderByDescending( t => {
 				return Vector3.SqrMagnitude(transform.position-t.position);
-			}).LastOrDefault();
-		
-		return target ? (target.position-transform.position).normalized : Vector3.zero;
+		});
+
+		foreach(Vector3 v in targets.position)
+			dir+=v-transform.position;
+		return dir.normalized;
 	}
 	
 	public Vector3 Seek(string tag, float maxDistance){
-		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
-		Transform target = gos.Select (go => go.transform)
-		.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
-		.OrderByDescending( t => {
+		Transform target = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
+			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
+			.OrderByDescending( t => {
 				return Vector3.SqrMagnitude(transform.position-t.position);
 		}).LastOrDefault();
 
@@ -40,7 +41,7 @@ public class SteeringBehaviours : MonoBehaviour{
 		return Seek(new Vector3(Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f)));
 	}
 
-	public Vector3 Flee(string tag, float maxDistance = 5.0f){
+	public Vector3 FleeAll(string tag, float maxDistance = 5.0f){
 		Vector3 dir = Vector3.zero;
 		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
 		Transform[] targets = gos.Select( go => go.transform)
@@ -50,7 +51,17 @@ public class SteeringBehaviours : MonoBehaviour{
 			dir+=transform.position-t.position;
 		return dir.normalized;
 	}
-
+	
+	public Vector3 Flee(string tag, float maxDistance){
+		Transform target = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
+			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
+				.OrderByDescending( t => {
+					return Vector3.SqrMagnitude(transform.position-t.position);
+				}).LastOrDefault();
+		
+		return target ? (transform.position-target.position).normalized : Vector3.zero;
+	}
+	
 	public Vector3 Flee(Transform target){
 		return (transform.position-target.position).normalized;
 	}
