@@ -18,7 +18,7 @@ public final static class SteeringBehaviours{
         return (target.subtract(self).normalize());
     }
     
-    public Vector3f Wander(Vector3f self){
+    public static Vector3f Wander(Vector3f self){
         return new Vector3f(Random(0.0f,1.0f),Random(0.0f,1.0f),Random(0.0f,1.0f));
     }
     
