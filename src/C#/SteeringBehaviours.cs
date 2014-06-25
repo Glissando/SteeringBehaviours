@@ -98,12 +98,12 @@ public class SteeringBehaviours : MonoBehaviour{
 
 		return Vector3.zero;
 	}
-
+	
 	public Vector3 Arrive(string tag, float maxDistance){
 		Vector3 v;
 		Transform[] targets = GameObject.FindGameObjectsWithTag(tag)
 			.Select( go => go.transform)
-			.Where( t => Vector3.Distance(transform.position,t.position) < maxDistance/2);
+			.Where( t => Vector3.SqrMagnitude(transform.position,t.position) < (maxDistance*maxDistance)/2);
 
 		foreach(Transform t in targets)
 			v+= -rigidbody.velocity*(Vector3.Distance(transform.position,t.position)/maxDistance);
@@ -111,11 +111,11 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 	
 	public Vector3 Arrive(Transform target){
-		return (-rigidbody.velocity*(Vector3.Distance(transform.position,target.position)/maxDistance)).normalized;
+		return -rigidbody.velocity.normalized*(Vector3.Distance(transform.position,target.position)/maxDistance);
 	}
 
 	public Vector3 Arrive(Vector3 target){
-		return (-rigidbody.velocity*(Vector3.Distance(transform.position,target)/maxDistance)).normalized;
+		return -rigidbody.velocity.normalized*(Vector3.Distance(transform.position,target)/maxDistance);
 	}
 
 	public Vector3 Pursuit(Transform target){
