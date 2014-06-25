@@ -8,6 +8,7 @@ public class SteeringBehaviours : MonoBehaviour{
 
 	public Vector3 SeekAll(string tag, float maxDistance){
 		Vector3 dir = Vector3.zero;
+		Vector3 one = new Vector3(1,1,1);
 		Transform[] targets = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
 			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
 			.OrderByDescending( t => {
@@ -15,7 +16,7 @@ public class SteeringBehaviours : MonoBehaviour{
 		});
 
 		foreach(Vector3 v in targets.position)
-			dir+=v-transform.position;
+			dir+=one/(v-transform.position);
 		return dir.normalized;
 	}
 	
@@ -43,12 +44,13 @@ public class SteeringBehaviours : MonoBehaviour{
 
 	public Vector3 FleeAll(string tag, float maxDistance = 5.0f){
 		Vector3 dir = Vector3.zero;
+		Vector3 one = new Vector3(1,1,1);
 		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
 		Transform[] targets = gos.Select( go => go.transform)
 		.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance);
 
 		foreach(Transform t in targets)
-			dir+=transform.position-t.position;
+			dir+=one/(transform.position-t.position);
 		return dir.normalized;
 	}
 	
