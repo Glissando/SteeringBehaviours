@@ -171,7 +171,7 @@ public class SteeringBehaviours : MonoBehaviour{
 
 		foreach(Transform t in neighbours)
 			v+=t.position;
-		return (v/neighbours.Length).normalized;
+		return Seek(v/neighbours.Length);
 	}
 
 	public Vector3 Seperation(string tag, float maxDistance){
