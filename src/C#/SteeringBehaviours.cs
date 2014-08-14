@@ -25,7 +25,7 @@ public class SteeringBehaviours : MonoBehaviour{
 	}
 
 	public Vector3 Wander(){
-		return Seek(new Vector3(Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f)));
+		return Seek(new Vector3(Random.Range (0.0f,1.0f),Random.Range (0.0f,1.0f),Random.Range (0.0f,1.0f)));
 	}
 	
 	public Vector3 Flee(string tag, float maxDistance){
@@ -46,31 +46,15 @@ public class SteeringBehaviours : MonoBehaviour{
 		return (transform.position-target).normalized;
 	}
 
-	public Vector3 Avoid(float maxDistance){
-		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, maxDistance))
-			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
-
-		return Vector3.zero;
-	}
-
-	public Vector3 Avoid(int layerMask){
-		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity,1 << layerMask))
-			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
+	public Vector3 Avoid(string tag, float maxDistance){
+		Vector3 dir = Vector3.zero;
+		var objects = GameObject.FindGameObjectsWithTag(tag)
+		.Select(go => go.transform)
+		.Where(t => Vector3.SqrMagnitude(transform.position,t.position) < (maxDistance*maxDistance));
 		
-		return Vector3.zero;
-	}
-
-	public Vector3 Avoid(int layerMask, float maxDistance){
-		Ray ray = new Ray(transform.position,transform.forward*rigidbody.velocity.magnitude);
-		RaycastHit hit;
-		if(Physics.Raycast(ray, out hit, maxDistance,1 << layerMask))
-			return (Vector3.Distance(hit.point,hit.transform.position)*(hit.point-hit.transform.position)).normalized;
-
-		return Vector3.zero;
+		foreach(Transform t in objects)
+			dir += Flee(t);
+		return dir.normalized;
 	}
 	
 	public Vector3 Arrive(string tag, float maxDistance){
@@ -79,17 +63,21 @@ public class SteeringBehaviours : MonoBehaviour{
 			.Select( go => go.transform)
 			.Where( t => Vector3.SqrMagnitude(transform.position,t.position) < (maxDistance*maxDistance)/2);
 
-		foreach(Transform t in targets)
-			dir += Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,t.position));
+		foreach(Transform t in targets){
+			float dRatio = maxDistance/Vector3.Distance(transform.position,t.position);
+			dir += (dRatio > 1) ? Seek(t)/dRatio : Seek(t));
+		}
 		return dir.normalized;
 	}
 	
 	public Vector3 Arrive(Transform target, float maxDistance){
-		return Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,target.position));
+		dRatio = maxDistance/Vector3.Distance(transform.position,target.position);
+		return (dRatio > 1) ? Seek(target)/dRatio : Seek(target);
 	}
 
 	public Vector3 Arrive(Vector3 target,float maxDistance){
-		return Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,target));
+		dRatio = maxDistance/Vector3.Distance(transform.position,target);
+		return (dRatio > 1) ? Seek(target)/dRatio : Seek(target);
 	}
 
 	public Vector3 Pursuit(Transform target){
