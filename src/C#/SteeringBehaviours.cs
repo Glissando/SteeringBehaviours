@@ -6,20 +6,6 @@ using System.Linq;
 [RequireComponent(typeof(Rigidbody))]
 public class SteeringBehaviours : MonoBehaviour{
 
-	public Vector3 SeekAll(string tag, float maxDistance){
-		Vector3 dir = Vector3.zero;
-		Vector3 one = new Vector3(1,1,1);
-		Transform[] targets = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
-			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
-			.OrderByDescending( t => {
-				return Vector3.SqrMagnitude(transform.position-t.position);
-		});
-
-		foreach(Vector3 v in targets.position)
-			dir+=one/(v-transform.position);
-		return dir.normalized;
-	}
-	
 	public Vector3 Seek(string tag, float maxDistance){
 		Transform target = GameObject.FindGameObjectsWithTag(tag).Select (go => go.transform)
 			.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance)
@@ -40,18 +26,6 @@ public class SteeringBehaviours : MonoBehaviour{
 
 	public Vector3 Wander(){
 		return Seek(new Vector3(Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f),Random.Range (0.0f,5.0f)));
-	}
-
-	public Vector3 FleeAll(string tag, float maxDistance = 5.0f){
-		Vector3 dir = Vector3.zero;
-		Vector3 one = new Vector3(1,1,1);
-		GameObject[] gos = GameObject.FindGameObjectsWithTag(tag);
-		Transform[] targets = gos.Select( go => go.transform)
-		.Where(t => Vector3.SqrMagnitude(transform.position-t.position) < maxDistance * maxDistance);
-
-		foreach(Transform t in targets)
-			dir+=one/(transform.position-t.position);
-		return dir.normalized;
 	}
 	
 	public Vector3 Flee(string tag, float maxDistance){
