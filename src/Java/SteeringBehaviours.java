@@ -30,14 +30,11 @@ public final static class SteeringBehaviours{
         return self.subtract(target).normalize();
     }
     
-    public static Vector3f Avoid(Spatial self, Spatial[] others, float maxDistance){
+    public Vector3f Avoid(Spatial self, Spatial[] others, float maxDistance){
         Vector3f dir = Vector3f.ZERO;
-        Vector3f forward = self.getWorldTranslation().add(
-        self.getWorldTransform().getRotation().toRotationMatrix().mult(new Vector3f(1,1,1)).normalize());
-        Main.entityData.getComponent(id, Spatial)
         for(Spatial s : others)
             if(s.getWorldTranslation().distanceSquared(self.getWorldTranslation()) > maxDistance/2)
-                forward.subtract(Vector3f.UNIT_XYZ.divide(s.getWorldTranslation()));
+                dir.add(Flee(self.getWorldTranslation(),s.getWorldTranslation()));
         return dir.normalize();
     }
 }
