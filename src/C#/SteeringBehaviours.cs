@@ -80,16 +80,16 @@ public class SteeringBehaviours : MonoBehaviour{
 			.Where( t => Vector3.SqrMagnitude(transform.position,t.position) < (maxDistance*maxDistance)/2);
 
 		foreach(Transform t in targets)
-			dir += Seek(transform,target)/Vector3.Distance(transform.position,t.position));
+			dir += Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,t.position));
 		return dir.normalized;
 	}
 	
-	public Vector3 Arrive(Transform target){
-		return Seek(transform,target)/Vector3.Distance(transform.position,target.position));
+	public Vector3 Arrive(Transform target, float maxDistance){
+		return Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,target.position));
 	}
 
-	public Vector3 Arrive(Vector3 target){
-		return Seek(transform,target)/Vector3.Distance(transform.position,target));
+	public Vector3 Arrive(Vector3 target,float maxDistance){
+		return Seek(transform,target)/(maxDistance/Vector3.Distance(transform.position,target));
 	}
 
 	public Vector3 Pursuit(Transform target){
