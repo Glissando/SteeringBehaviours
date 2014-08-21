@@ -65,7 +65,7 @@ public class SteeringBehaviours : MonoBehaviour{
 
 		foreach(Transform t in targets){
 			float dRatio = maxDistance/Vector3.Distance(transform.position,t.position);
-			dir += (dRatio > 1) ? Seek(t)/dRatio : Seek(t));
+			dir += (dRatio > 1) ? Seek(t)/dRatio : Seek(t);
 		}
 		return dir.normalized;
 	}
